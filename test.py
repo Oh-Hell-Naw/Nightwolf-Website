@@ -63,6 +63,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            if event.type == pygame.VIDEORESIZE:
+             screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE | pygame.DOUBLEBUF)
             
     # Handle player movement
     keys = pygame.key.get_pressed()
