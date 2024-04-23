@@ -6,9 +6,16 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Soon there will be a game to download
+    <h1> Download game <button id="rickroll-button">Get Rickrolled!</button>
     </h1>
     <h2> Help me the voices are getting louder</h2>
     <h3> <img src="normal.png" alt="normal"> </h3>
 </body>
+<script>
+    document.getElementById("rickroll-button").addEventListener("click", function()
+    {
+        var rickroll_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            rickroll_window = window.open(rickroll_url);
+    });
+</script>
 </html>
