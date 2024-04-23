@@ -61,8 +61,11 @@ running = True
 while running:
 
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+         if event.type == pygame.QUIT:
             running = False
+         elif event.type == pygame.VIDEORESIZE:
+            WIDTH = event.w
+            HEIGHT = event.h
             
     # Handle player movement
     keys = pygame.key.get_pressed()
@@ -73,7 +76,15 @@ while running:
         player_x += player_speed
         sword_x += player_speed
     if keys[pygame.K_SPACE] and player_on_ground == True and player_y_velocity == 0:
+        print("Jumping!")
         player_y_velocity = player_jump_speed
+    if player_x + player_width > WIDTH:
+        player_x = 0    
+    
+    # update platform
+    platform_x += platform_speed
+    if platform_x + platform_width > WIDTH:
+        platform_x = 0
 
     # Update sword position
     sword_x = player_x + player_width // 2 - sword_width // 2
@@ -97,11 +108,11 @@ while running:
     pygame.draw.rect(screen, GREEN, (platform_x, platform_y, platform_width, platform_height))
 
     # Draw enemies
-    for enemy in enemies:
-        pygame.draw.rect(screen, RED, (enemy["x"], enemy["y"], enemy_width, enemy_height))
+    #for enemy in enemies:
+        #pygame.draw.rect(screen, RED, (enemy["x"], enemy["y"], enemy_width, enemy_height))
 
     # Draw sword
-    pygame.draw.rect(screen, BLUE, (sword_x, sword_y, sword_width, sword_height))
+    #pygame.draw.rect(screen, BLUE, (sword_x, sword_y, sword_width, sword_height))
 
     # Draw player
     pygame.draw.rect(screen, RED, (player_x, player_y, player_width, player_height))

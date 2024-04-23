@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random 
 
 # Constants
 FPS = 60
@@ -18,10 +19,9 @@ pygame.display.set_caption("Jump and Run")
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
+BLUE = (0, 0 , 255)
 
 # Player properties
-player_image = pygame.image.load('normal.png')
 player_width = 50
 player_height = 50
 player_x = WIDTH // 2 - player_width // 2
@@ -31,26 +31,19 @@ player_jump_speed = -15
 player_on_ground = True
 player_y_velocity = 0
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, image):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.speed = 5
-        self.jump_speed = -15
-        self.on_ground = True
-        self.y_velocity = 0
-
-player = Player(WIDTH // 2 - player_width // 2, HEIGHT - player_height - 10, player_image)
-
 # Platform properties
 platform_width = 100
 platform_height = 20
 platform_x = WIDTH // 2 - platform_width // 2
 platform_y = HEIGHT - platform_height - 100
 platform_speed = 2
+
+# Sword properties
+sword_width = 20
+sword_height = 50
+sword_x = player_x + player_width // 2 - sword_width // 2
+sword_y = player_y - sword_height
+sword_speed = 10
 
 # Enemy properties
 enemy_width = 50
@@ -71,16 +64,35 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
-    keys = pygame.key.get_pressed()
+        elif event.type == pygame.VIDEORESIZE:
+            WIDTH = event.w
+            HEIGHT = event.h
 
     # Handle player movement
-    if keys[pygame.K_a] and player.rect.x > 0:
-        player.rect.x -= player.speed
-    if keys[pygame.K_d] and player.rect.x < WIDTH - player.rect.width:
-        player.rect.x += player.speed
-    if keys[pygame.K_SPACE] and player.on_ground == True and player.y_velocity == 0:
-        player.y_velocity = player.jump_speed
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_a] and player_x > 0:
+        player_x -= player_speed
+        sword_x -= player_speed
+    if keys[pygame.K_d] and player_x < WIDTH - player_width:
+        player_x += player_speed
+        sword_x += player_speed
+    if keys[pygame.K_SPACE] and player_on_ground == True and player_y_velocity == 0:
+        print("Jumping!")
+        player_y_velocity = player_jump_speed
+
+    # update platform
+    platform_x += platform_speed
+
+    # Update sword position
+    sword_x = player_x + player_width // 2 - sword_width // 2
+    sword_y = player_y - sword_height
+
+    # Collision detection between sword and enemies
+    for enemy in enemies:
+        if sword_y + sword_height > enemy["y"] and sword_y < enemy["y"] + enemy_height and sword_x < enemy["x"] + enemy_width and sword_x + sword_width > enemy["x"]:
+            enemies.remove(enemy)
+            score += 100 
+        
 
     # Collision detection between enemies and player
     for enemy in enemies:
@@ -97,8 +109,11 @@ while running:
     for enemy in enemies:
         pygame.draw.rect(screen, RED, (enemy["x"], enemy["y"], enemy_width, enemy_height))
 
+    # Draw sword
+    pygame.draw.rect(screen, BLUE, (sword_x, sword_y, sword_width, sword_height))
+
     # Draw player
-    screen.blit(player.image, player.rect)
+    pygame.draw.rect(screen, RED, (player_x, player_y, player_width, player_height))
 
     # Update the display
     pygame.display.flip()
@@ -118,3 +133,4 @@ while running:
 # Quit the game
 pygame.quit()
 sys.exit()
+os.exit()
