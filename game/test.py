@@ -81,10 +81,7 @@ while running:
     # Draw platforms
     pygame.draw.rect(screen, GREEN, (platform_x, platform_y, platform_width, platform_height))
     
-    
-
     # Draw / render
-    
     pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(player_pos[0], player_pos[1], player_size, player_size))
     pygame.display.flip()
 
