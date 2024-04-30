@@ -1,5 +1,7 @@
 import pygame
 import math
+import sys
+import random
 
 # Initialize Pygame
 pygame.init()
@@ -9,6 +11,13 @@ WIDTH, HEIGHT = 800, 600
 FPS = 60
 GRAVITY = 0.5
 JUMP_FORCE = -15
+
+# Colors
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0 , 255)
+SKY = (135, 206, 250)
 
 # Set up the display
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -20,6 +29,14 @@ clock = pygame.time.Clock()
 player_size = 50
 player_pos = [WIDTH // 2, HEIGHT - player_size - 50]
 player_vel = [0, 0]
+
+# Platform properties
+platform_width = 100
+platform_height = 20
+platform_x = WIDTH // 2 - platform_width // 2
+platform_y = HEIGHT - platform_height - 100
+platform_speed = 2
+
 
 # Game loop
 running = True
@@ -35,9 +52,9 @@ while running:
 
     # Update
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
+    if keys[pygame.K_a]:
         player_vel[0] = -5
-    elif keys[pygame.K_RIGHT]:
+    elif keys[pygame.K_d]:
         player_vel[0] = 5
     else:
         player_vel[0] = 0
@@ -54,8 +71,20 @@ while running:
         player_pos[1] = HEIGHT - player_size
         player_vel[1] = 0
 
+        # update platform
+    platform_x += platform_speed
+    if platform_x + platform_width > WIDTH:
+        platform_x = 0
+    # Clear the screen
+    screen.fill((SKY))
+
+    # Draw platforms
+    pygame.draw.rect(screen, GREEN, (platform_x, platform_y, platform_width, platform_height))
+    
+    
+
     # Draw / render
-    screen.fill((135, 206, 250))
+    
     pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(player_pos[0], player_pos[1], player_size, player_size))
     pygame.display.flip()
 
