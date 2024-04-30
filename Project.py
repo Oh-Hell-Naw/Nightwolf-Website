@@ -28,7 +28,7 @@ player_y = HEIGHT - player_height - 10
 player_speed = 5
 player_jump_speed = -15
 player_on_ground = True
-player_y_velocity = 0
+player_y_velocity = -15
 
 # Platform properties
 platform_width = 100
@@ -38,8 +38,8 @@ platform_y = HEIGHT - platform_height - 100
 platform_speed = 2
 
 # Sword properties
-sword_width = 20
-sword_height = 50
+sword_width = 15
+sword_height = 45
 sword_x = player_x + player_width // 2 - sword_width // 2
 sword_y = player_y - sword_height
 sword_speed = 10
@@ -75,7 +75,7 @@ while running:
     if keys[pygame.K_d] and player_x < WIDTH - player_width:
         player_x += player_speed
         sword_x += player_speed
-    if keys[pygame.K_SPACE] and player_on_ground == True and player_y_velocity == 0:
+    if keys[pygame.K_SPACE] and player_on_ground == True:
         print("Jumping!")
         player_y_velocity = player_jump_speed
     if player_x + player_width > WIDTH:
@@ -108,11 +108,11 @@ while running:
     pygame.draw.rect(screen, GREEN, (platform_x, platform_y, platform_width, platform_height))
 
     # Draw enemies
-    #for enemy in enemies:
-        #pygame.draw.rect(screen, RED, (enemy["x"], enemy["y"], enemy_width, enemy_height))
+    for enemy in enemies:
+        pygame.draw.rect(screen, RED, (enemy["x"], enemy["y"], enemy_width, enemy_height))
 
     # Draw sword
-    #pygame.draw.rect(screen, BLUE, (sword_x, sword_y, sword_width, sword_height))
+    pygame.draw.rect(screen, BLUE, (sword_x, sword_y, sword_width, sword_height))
 
     # Draw player
     pygame.draw.rect(screen, RED, (player_x, player_y, player_width, player_height))
