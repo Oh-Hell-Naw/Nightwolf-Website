@@ -10,12 +10,16 @@ HEIGHT = 600
 GRAVITY = 0.5
 JUMP_FORCE = -15
 
+
 # Game state
 game_over = False
 
 # Set the video mode
-screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE | pygame.DOUBLEBUF)
+
+screen = pygame.display.set_mode((800,600), pygame.RESIZABLE | pygame.DOUBLEBUF|pygame.HWSURFACE)
+
 pygame.display.set_caption("Jump and Run")
+
 
 # Colors
 WHITE = (255, 255, 255)
@@ -28,6 +32,7 @@ BLUE = (0, 0 , 255)
 player_size = 50
 player_pos = [WIDTH // 2, HEIGHT - player_size - 50]
 player_vel = [0, 0]
+player_on_ground = True
 
 # Platform properties
 platform_width = 100
@@ -35,6 +40,12 @@ platform_height = 20
 platform_x = WIDTH // 2 - platform_width // 2
 platform_y = HEIGHT - platform_height - 100
 platform_speed = 2
+
+#ground properties
+ground_width = WIDTH
+ground_height = 10
+ground_x = 0
+ground_y = 590
 
 # Sword properties
 #sword_width = 20
@@ -65,19 +76,23 @@ while running:
          elif event.type == pygame.VIDEORESIZE:
             WIDTH = event.w
             HEIGHT = event.h
+           
             
     # Handle player movement
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
         player_vel[0] = -5
     elif keys[pygame.K_d]:
+        
+
         player_vel[0] = 5
     else:
         player_vel[0] = 0
 
     if keys[pygame.K_SPACE] and player_vel[1] == 0:
         player_vel[1] = JUMP_FORCE
-
+        
+     
     player_vel[1] += GRAVITY
     player_pos[1] += player_vel[1]
     player_pos[0] += player_vel[0]
@@ -111,7 +126,7 @@ while running:
     screen.fill(WHITE)
 
     # Draw platforms
-    pygame.draw.rect(screen, GREEN, (platform_x, platform_y, platform_width, platform_height))
+    pygame.draw.rect(screen, BLUE, (platform_x, platform_y, platform_width, platform_height))
 
     # Draw enemies
     #for enemy in enemies:
@@ -119,6 +134,9 @@ while running:
 
     # Draw sword
     #pygame.draw.rect(screen, BLUE, (sword_x, sword_y, sword_width, sword_height))
+
+    #Draw Ground
+    pygame.draw.rect(screen,GREEN, (ground_x,ground_y,ground_width,ground_height))
 
     # Draw player
     pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(player_pos[0], player_pos[1], player_size, player_size))
