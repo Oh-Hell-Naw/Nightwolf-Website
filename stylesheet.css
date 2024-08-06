@@ -6,3 +6,40 @@ body {
 .news-item {
     margin-bottom: 20px;
   }
+  /* Add icons to links */
+ul li a {
+  text-decoration: none;
+  padding: 10px;
+}
+
+ul li a:hover {
+  color: #337ab7;
+}
+
+/* Twitch icon */
+ul li a[href*="twitch"]::before {
+  font-family: "Font Awesome 5 Brands";
+  content: "\f1e8";
+  margin-right: 10px;
+}
+
+/* GitHub icon */
+ul li a[href*="github"]::before {
+  font-family: "Font Awesome 5 Brands";
+  content: "\f09b";
+  margin-right: 10px;
+}
+
+/* TikTok icon */
+ul li a[href*="tiktok"]::before {
+  font-family: "Font Awesome 5 Brands";
+  content: "\e07b";
+  margin-right: 10px;
+}
+
+/* Website icon (using a generic globe icon) */
+ul li a[href*="ohhellnaw"]::before {
+  font-family: "Font Awesome 5 Solid";
+  content: "\f0ac";
+  margin-right: 10px;
+}
