@@ -1,0 +1,10 @@
+<head>
+    <link rel="shortcut icon" type="image/x-icon" href="icon.jpg" />
+    <title>Nightwolf</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <img src="/assets/profile-hexagon.svg" alt="" class="profile-picture" />
+
+    <!-- <h1>Nightwolf</h1> -->
+  </body>
