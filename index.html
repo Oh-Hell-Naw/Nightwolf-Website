@@ -1,15 +1,228 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    
-    <link rel="shortcut icon" type="image/x-icon" href="icon.jpg" />
-    <title>Nightwolf</title>
-    <link rel="stylesheet" href="index.css" />
-  </head>
-  <body>
-   
-    <img src="/assets/profile.svg" alt="" class="profile-picture" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The White Hawk | Portfolio</title>
+    <link rel="icon" href="icon.jpg" type="image/jpeg">
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
 
-    <h1>Nightwolf</h1>
-  </body>
-</html> 
+    <style>
+        :root {
+            --bg: #0F172A;
+            --accent: #E5E7EB;
+            --text-main: #F9FAFB;
+            --text-sub: #94A3B8;
+            --pfp-shape: 50% 50% 10% 10% / 80% 80% 20% 20%;
+        }
+
+        body.eclipse-active {
+            --bg: #000000;
+            --accent: #ff0000;
+            --text-main: #ffffff;
+            --pfp-shape: 50%;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg); color: var(--text-main); 
+            font-family: 'Lora', serif; transition: background 1.5s ease; 
+            overflow-x: hidden; min-height: 100vh; font-size: 1.4rem;
+        }
+
+        h1, h2, h3, .logo, .eclipse-toggle, .section-title {
+            font-family: 'Cinzel', serif; text-transform: uppercase; letter-spacing: 4px;
+        }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; transition: opacity 1s;
+        }
+        .loader-text { color: #ff0000; font-family: 'Cinzel'; letter-spacing: 10px; font-weight: 900; font-size: 1.5rem; animation: pulseText 2s infinite alternate; }
+        @keyframes pulseText { from { opacity: 0.4; } to { opacity: 1; text-shadow: 0 0 20px #ff0000; } }
+
+        /* --- HEADER --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 2% 1.5rem 5%; position: sticky; top: 0; z-index: 1000;
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.05); width: 100%;
+        }
+        .nav-right { display: flex; align-items: center; gap: 30px; margin-left: auto; }
+        .pfp-container { width: 75px; height: 100px; border: 2px solid var(--accent); border-radius: var(--pfp-shape); overflow: hidden; transition: 0.8s; flex-shrink: 0; }
+        .pfp-img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- SECTIONS --- */
+        .section { padding: 100px 10%; text-align: center; max-width: 1500px; margin: 0 auto; position: relative; }
+        .hero h1 { font-size: 6rem; margin-bottom: 30px; color: var(--accent); font-weight: 900; }
+        .hero-quote { max-width: 1000px; margin: 20px auto; color: var(--text-sub); font-style: italic; font-size: 1.5rem; line-height: 1.7; min-height: 180px; transition: opacity 0.5s ease; display: flex; align-items: center; justify-content: center; }
+
+        .content-box, .card { background: rgba(255, 255, 255, 0.03); padding: 60px; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(8px); }
+        .grid-campaigns { display: flex; justify-content: center; gap: 50px; margin-top: 60px; }
+        .card { flex: 1; text-align: left; transition: 0.5s; }
+        .card:hover { border-color: var(--accent); transform: translateY(-15px); }
+
+        /* Eclipse Mode Animation */
+        body.eclipse-active #mainTitle { animation: glitch 0.3s infinite; text-shadow: 4px 0 #4a0000; }
+        @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(3px, -3px); } 100% { transform: translate(0); } }
+
+        .eclipse-toggle { background: transparent; border: 2px solid var(--accent); color: var(--accent); padding: 0.8rem 1.8rem; cursor: pointer; font-weight: 900; }
+        footer { padding: 100px 10%; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .social-links a { color: var(--accent); text-decoration: none; font-family: 'Cinzel'; margin: 0 30px; font-size: 1.2rem; transition: 0.3s; }
+        .social-links a:hover { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+
+        input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; width: 80px; accent-color: var(--accent); }
+        input[type=range]::-webkit-slider-runnable-track { background: var(--accent); height: 2px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 12px; width: 12px; background: var(--accent); border-radius: 50%; margin-top: -5px; }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <p class="loader-text">AWAITING DESTINY</p>
+    </div>
+
+    <audio id="sfxE" src="eclipse-sound.wav" preload="auto"></audio>
+    <audio id="sfxL" src="light-sound.wav" preload="auto"></audio>
+
+    <header>
+        <div class="logo">Falconia</div>
+        <div class="nav-right">
+            <div style="display: flex; align-items: center; gap: 10px; color: var(--accent); font-family: 'Cinzel'; font-size: 0.8rem;">
+                <span>VOL</span>
+                <input type="range" id="volSlider" min="0" max="1" step="0.01" value="0.3">
+            </div>
+            <button class="eclipse-toggle" id="eclipseBtn">The Eclipse</button>
+            <div class="pfp-container">
+                <img id="pfpImg" src="icon.jpg" alt="Griffith" class="pfp-img">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section hero">
+            <h1 id="mainTitle">The Visionary</h1>
+            <p id="quoteText" class="hero-quote">"Does man control his own destiny, or is it guided by a hand from above?"</p>
+        </section>
+
+        <section class="section" id="origins">
+            <h2 class="section-title">The Origins</h2>
+            <div class="content-box">
+                <p>I am Luan, a seeker of dreams and a master of my craft. Much like the White Hawk, I do not believe in limitations set by others. My journey is a calculated ascent toward a castle only I can see. I combine tactical precision with a relentless will to innovate.</p>
+            </div>
+        </section>
+
+        <section class="section" id="campaigns">
+            <h2 class="section-title">Grand Campaigns</h2>
+            <div class="grid-campaigns">
+                <div class="card">
+                    <h3>Project Alpha</h3>
+                    <p>A victory forged in strategy and absolute precision. We claimed the field when others saw only defeat.</p>
+                </div>
+                <div class="card">
+                    <h3>Operation Kingdom</h3>
+                    <p>Strategic conquest of the industry. This milestone serves as a cornerstone of my ever-expanding empire.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://github.com/Nightwolf-688">Github</a><a href="https://discord.gg/JV9EzTsxMC">Discord</a><a href="https://open.spotify.com/artist/1bYKeXSqasd3ImDmnktdCl">Spotify</a><a href="https://www.tiktok.com/@nightwolf1370">TikTok</a>
+        </div>
+        <p style="margin-top: 30px; font-size: 1rem; color: var(--text-sub); opacity: 0.5;">© 2024 The White Hawk | All rights reserved.</p>
+    </footer>
+
+    <script>
+        const griffithQuotes = [
+            '"In this world, is the destiny of mankind controlled by some transcendental entity or law? Is it like the hand of God hovering above?"',
+            '"A dream... it can be a support, but it can also be a burden. It is what makes a man truly alive. When a man dedicates his life to a dream, it is his very existence."',
+            '"I will have my own kingdom. I will not betray my dream. That is all. I will not be satisfied with merely living for the sake of being alive."',
+            '"A true friend is one who stands as an equal... one who has their own dream, and is willing to fight the world for it, even if that world includes me."',
+            '"Most people just live because they were born. But I have a reason to be here. I am looking at the castle in the distance, and I will walk over any number of corpses to reach it."',
+            '"I want to see the path I chose with my own eyes. Even if it is a path of blood and sacrifice, it is MY path."',
+            '"A man should never be satisfied with his lot in life. He should always strive to be more, to reach higher, to touch the sky."',
+            '"If you desire something with your whole being, the world itself will move to grant you that wish. This is the weight of ambition."',
+            '"The Band of the Hawk is my sword. I am the one who wields it. Their lives are the price for my dream, and I accept that burden."',
+            '"I don\'t care about what others think of me. I only care about the castle. That is the only thing that remains in my vision."',
+            '"Is it wrong to want everything? Is it wrong to want a place where I truly belong, a place that is mine alone?"',
+            '"You are mine. I decided that the day we met. You belong in my dream, and you will stay there until the end."',
+            '"I have no interest in being a king of a graveyard. I will build a kingdom of light, a kingdom that will last for eternity."',
+            '"Dreams breathe life into men and can also cage them in. A man lives for his dream and is killed by it."',
+            '"My dream will not be realized by prayers. It will be realized by the strength of my will and the sharpness of my blade."',
+            '"To me, a friend is someone who doesn\'t rely on another\'s dream. Someone who survives by their own strength."',
+            '"Look up. The sky is vast, and we are small. But if we reach high enough, we can touch the stars themselves."',
+            '"I will not be held back by the chains of morality. I will do whatever is necessary to achieve my goal."',
+            '"There is no such thing as a miracle. There is only the convergence of will and causality."',
+            '"I am the White Hawk. I am the one who brings the dawn. And I will not stop until the world is under my wing."'
+        ];
+
+        const femtoQuotes = [
+            '"I am the master of my own fate... and yours. The dream is no longer a wish, it is an absolute reality."',
+            '"Causality... it is the weave that binds us all to the abyss. You are merely threads in a tapestry I have already finished."',
+            '"I sacrificed them. All of them. To reach the castle. And I would do it again, a thousand times over, for the absolute power of the God Hand."',
+            '"There is no light here. Only the absolute will of the God Hand. You are in the presence of a god now."',
+            '"Your suffering is the fuel for my ascension. The brand on your skin is the signature of your inevitable end."',
+            '"Human emotion is a weakness I have long since discarded. I am beyond good and evil, beyond love and hate."',
+            '"The Eclipse has only just begun. The darkness will swallow the world, and I will be its king."',
+            '"You struggle in vain. Every movement you make was already destined by the flow of causality."',
+            '"I am Femto. The fifth of the God Hand. The one who will bring the true age of darkness."',
+            '"Your lives were never yours. They were always meant to be offered to the abyss for my rebirth."',
+            '"I am no longer the man you knew. That man was weak. I am the realization of the absolute dream."',
+            '"The silence of the dead is the only music I need. Their screams were the price for my wings."',
+            '"Behold the power of a god. I can warp the very fabric of space and time to suit my will."',
+            '"Despair is the only truth in this world. Everything else is a lie we tell ourselves to survive."',
+            '"I have reached the top of the mountain. And from here, I see only the insignificance of human existence."',
+            '"The brand will bleed until you are consumed. There is no escape from the mark of the sacrifice."',
+            '"I am the shadow that the world has always feared. I am the end of all hope and the beginning of a new order."',
+            '"Causality is not a chain, it is a river. And I am the one who directs its flow."',
+            '"The world is a stage, and the God Hand are the directors. You are merely the actors who must die for the play to continue."',
+            '"Welcome to the end of your world. Welcome to the beginning of my eternity."'
+        ];
+
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => { preloader.style.opacity = '0'; setTimeout(() => preloader.style.display = 'none', 1000); }, 2000);
+        });
+
+        const btn = document.getElementById('eclipseBtn');
+        const vol = document.getElementById('volSlider');
+        const body = document.body;
+        const pfp = document.getElementById('pfpImg');
+        const title = document.getElementById('mainTitle');
+        const quote = document.getElementById('quoteText');
+        const sfxE = document.getElementById('sfxE');
+        const sfxL = document.getElementById('sfxL');
+
+        const getRandomQuote = (quotes) => quotes[Math.floor(Math.random() * quotes.length)];
+
+        btn.addEventListener('click', () => {
+            body.classList.toggle('eclipse-active');
+            quote.style.opacity = '0';
+            
+            setTimeout(() => {
+                if (body.classList.contains('eclipse-active')) {
+                    sfxL.pause(); sfxL.currentTime = 0; sfxE.play().catch(() => {});
+                    btn.textContent = 'Golden Age';
+                    title.textContent = 'F E M T O';
+                    quote.textContent = getRandomQuote(femtoQuotes);
+                    pfp.src = 'femto.jpg';
+                } else {
+                    sfxE.pause(); sfxE.currentTime = 0; sfxL.play().catch(() => {});
+                    btn.textContent = 'The Eclipse';
+                    title.textContent = 'The Visionary';
+                    quote.textContent = getRandomQuote(griffithQuotes);
+                    pfp.src = 'icon.jpg';
+                }
+                quote.style.opacity = '1';
+            }, 500);
+        });
+
+        sfxL.volume = vol.value; sfxE.volume = vol.value;
+        vol.addEventListener('input', (e) => { sfxL.volume = e.target.value; sfxE.volume = e.target.value; });
+    </script>
+</body>
+</html>
